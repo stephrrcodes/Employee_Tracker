@@ -146,7 +146,7 @@ addRole = () => {
             },
             {
             name: 'name',
-            type: 'rawlist',
+            type: 'list',
             message: 'Which department do you want to add the new role?',
             choices: department
             },
@@ -187,13 +187,13 @@ addEmployee = () => {
                 },
                 {
                     name: 'role',
-                    type: 'rawlist',
+                    type: 'list',
                     message: 'What is the new role?',
                     choices: roles
                 },
                 {
                     name: 'manager',
-                    type: 'rawlist',
+                    type: 'ist',
                     message: 'Who is the manager?',
                     choices: employees
                 }
