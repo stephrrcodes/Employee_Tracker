@@ -31,4 +31,6 @@
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/stephrrcodes)
 
-##Employee Tracker
+## Mock Up 
+![first](./assets/12-sql-homework-demo-01.png)
+![second](./assets/12-sql-homework-video-thumbnail.png)

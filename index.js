@@ -1,7 +1,7 @@
 // Dependencies
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-const consoleTables = require('console.table');
+const cTable = require('console.table');
 
 // Connect to sql database
 const connection = mysql.createConnection ({
@@ -11,8 +11,8 @@ const connection = mysql.createConnection ({
     password:'password',
     database: 'employee_db',
 })
-connection.connect((err) => {
-    if (err) throw err;
+connection.connect(err => {
+    if(err) throw err;
     console.log('Database connected!');
     firstPrompt();
 });
@@ -63,7 +63,7 @@ firstPrompt = () => {
                 addEmployee();
                 break;
             
-            case 'Update Employee':
+            case 'Update Employee Role':
                 updateEmployee();
                 break;
     
@@ -148,7 +148,7 @@ addRole = () => {
             name: 'name',
             type: 'list',
             message: 'Which department do you want to add the new role?',
-            choices: department
+            choices: departments
             },
         ]).then((response) => {
             connection.query(`INSERT INTO role SET ?`, 
@@ -224,10 +224,39 @@ addEmployee = () => {
 
 // UPDATE Functions - Employee
 updateEmployee = () => {
-
+    connection.query(`SELECT * FROM role;`, (err,res) => {
+        if (err) throw err;
+        let roles = res.map(role => ({ name:role.title, value: role.role_id}));
+        connection.query(`SELECT * FROM employee;`, (err, res) => {
+            if (err) throw err;
+            let employees = res.map(employee => ({name: employee.first_name + ' ' + employee.last_name, value: employee.employee_id }));
+            inquirer
+            .prompt([
+                {
+                    name: 'employee',
+                    type: 'rawlist',
+                    message: 'Which Employee would you like to update their Role?',
+                    choices: employees
+                },
+                {
+                    name: 'newRole',
+                    type: 'rawlist',
+                    message: 'What should their new Role be?',
+                    choices: roles
+                },
+            ]).then((response) => {
+                connection.query(`UPDATE employee SET ? WHERE ?`,[
+                    {role_id: response.newRole,},
+                    {employee_id: response.employee,},
+                ], 
+                (err, res) => {
+                    if (err) throw err;
+                    console.log(`\n You have updated the Employee's Role! \n`);
+                    firstPrompt();
+                })
+            })
+        })
+    })
 };
 
-// EXIT Function
-Exit = () => {
-    
-};
+firstPrompt();
